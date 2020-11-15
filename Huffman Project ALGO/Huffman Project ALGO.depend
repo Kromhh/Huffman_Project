@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1605211403 source:c:\users\victo\onedrive\bureau\huffman project algo\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<wchar.h>
+	"function.h"
+
+1605466002 c:\users\victo\onedrive\bureau\huffman project algo\function.h
+
+1603984031 c:\users\victo\onedrive\bureau\huffman project algo\function.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"function.h"
+
+1605466009 source:c:\users\victo\onedrive\bureau\huffman project algo\function.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<wchar.h>
+	"function.h"
+
