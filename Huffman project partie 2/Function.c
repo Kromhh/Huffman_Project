@@ -2,34 +2,46 @@
 #include <stdlib.h>  
 #include "Structure.h"
 
-/////////////////////////////// ETAPE 2 : Creation of Letter ///////////////////////////////
-/* j'ai eu la fois de tout changer adulez moi */
 
-Letter* create_letter (char letter) {          // create a Letter from an Element
+/////////////////////////////// ETAPE 2 : create the list of letter /////////////////////////////// 
+// Part where I create the Node 
 
-    Letter* new_l = (Letter*)malloc (sizeof(Letter)) ; 
-    new_l ->letter = letter ;
-    new_l ->occ = 1 ; 
+// create a Node from an El //
+Node* create_node (char letter) {
 
-    /*
-    new_l ->bin = NULL ;                        // to be done
-    new_l ->new_bin = NULL ;
-    */
+    Node* new_node = (Node*) malloc (sizeof(Node)) ;
+    new_node ->letter = letter;
+    new_node->occ = 1 ; 
+    new_node ->left = NULL ;
+    new_node ->right = NULL ; 
 
-    return new_l ; 
+    return new_node; 
 }
 
-void display_letter (Letter* l) {               // to display the letter 
-    printf ("Letter = %c \n",l->letter)  ;
-    printf ("Occ = %d \n",l->occ)        ;
-    printf ("Binary = %c \n",l->bin)     ;
-    printf ("New_binary = %c \n",l->new_bin) ;
+/* display the letter and the number of occ of each node in a tree in a pre-order*/ 
+void display_tree(Node* tree) {
+    if (tree != NULL) {
+        printf ("letter : %c      Occ = %d \n", tree -> letter, tree ->occ ) ;
+        display_tree (tree ->left) ; 
+        display_tree (tree->right) ; 
+    }
+}
+
+/* free all the tree */ 
+void freeTree (Node* node)
+{
+    if (node != NULL) {
+        freeTree(node->left);  
+        freeTree(node->right);
+        free(node);
+    }
 }
 
 /////////////////////////////// ETAPE 2 : create the list of letter ///////////////////////////////
 
-// Creation of an Element by a letter //
-Element* create_El (Letter* l) { 
+// Creation of an Element by a Node //
+
+Element* create_El_N (Node* l) { 
     Element* new_El = (Element*) malloc (sizeof (Element));
     new_El ->El_letter = l ;  
     new_El ->next = NULL ; 
@@ -56,8 +68,8 @@ Element* occ_text () {
     else {
     // Part 2 : Create the 1st Element with the 1st letter of the file
         char templ = fgetc (fp1) ; 
-        Letter* l = create_letter (templ);                 
-        Element* Liste_L = create_El (l);
+        Node* l = create_node (templ);                 
+        Element* Liste_L = create_El_N (l);
 
     // Part 3 : Do the same with all the characters in the file
         while ((templ = fgetc (fp1)) != EOF)
@@ -69,44 +81,37 @@ Element* occ_text () {
             if (templ == temp_1->El_letter->letter) {                               // if yes : add +1 at the Element -> occ 
                 temp_1 -> El_letter -> occ++ ; 
             }
-            else                                                        // if no : add a new element at the start of the list
+            else                                                                    // if no : add a new element at the start of the list
             {
-                Letter* l = create_letter (templ);                 
-                Element* new_letter = create_El (l);         
+                Node* l = create_node (templ);                 
+                Element* new_letter = create_El_N (l);         
                 new_letter ->next = Liste_L ; 
                 Liste_L = new_letter ; 
             }
         }
 
-        fclose (fp1) ;                                                  // Close the file
-        return Liste_L ;                                                // Return the list
+        fclose (fp1) ;                                                              // Close the file
+        return Liste_L ;                                                            // Return the list
     }
 }
+
 
 // Free a list of Element //
-void free_list (Element** el) {
+void free_list (Element* el) {
     if (el != NULL) {
-        free_list (&(*el) -> next) ;
-        printf ("'%c' ", (*el) ->El_letter->letter); 
+        free_list (el -> next) ;
+        printf ("'%c' ", el ->El_letter->letter); 
 // Retirer free_letter dans le futur
-        free((*el)->El_letter) ;                                           // Free Letter 
-        free((*el));                                                       // Free Element 
-    }
-}
-
-void free_list_2 (Element **L){
-    while(*L != NULL) {
-        Element* temp = *L;
-        *L = (*L)->next;
-        free(temp); 
+        free(el->El_letter) ;                                                       // Free the Node
+        free(el);                                                                   // Free the Element 
     }
 }
 
 // Function that find the bigest occ and return its position // 
 int posMaximum(Element *L){
     Element* temp = L; 
-    int maxOcc = 0;                                                         // maxOcc = 0 because we have at list 1 occ 
-    int i = 1, posOcc;
+    int maxOcc = 0;                                                                 // maxOcc = 0 because we have at least 1 occ 
+    int i = 1, posOcc;                                                              // i = a counter for each turn 
 
     if (L==NULL){
         return -1;
@@ -125,9 +130,6 @@ int posMaximum(Element *L){
 }
 
 // Ecrire une fonction qui trie une list par nombre d'occ, décroissant // 
-// essai 1 
-/*ATTENTION si le premier caractère est le plus grand, il reste au début. 
-à corriger dans sorted_list et possMaximum, on ne check pas le premier caractère */
 
 void sorted_list (Element** list) {
     Element* savepos = *list;                                               // know where we are, move one by one 
@@ -150,7 +152,7 @@ void sorted_list (Element** list) {
         while (position > 0) {                                  // -1 means the list is empty 
             beforetemp = *list ; 
 
-// Setp 2 : go to the position of the Element //
+// Setp 2 : go to the position of the Element with Max Occ //
             if (position == 1) {
                 savepos = savepos->next ; 
             } 
@@ -160,19 +162,19 @@ void sorted_list (Element** list) {
            }
             temp = beforetemp ->next; 
 
-// setp 3 : put it at the start of the list //   
+// setp 3 : Put it at the start of the list //   
             beforetemp ->next = temp ->next ; 
             temp ->next = *list ;
             *list = temp ;
 
-            position = posMaximum (savepos); 
+            position = posMaximum (savepos);                    // Now we restart position 
             j++ ;
-        }                                                                   // Move the El at the start of the list 
+        }                                                                  
     }
     printf ("\n---------------------- list sorted ----------------------\n");
 }
 
-/* return the lenght of a list or 0 when it's NULL */ 
+/* return the lenght of a list or 0 when it's NULL */           // Ne sert pas pour le moment 
 int lenght_list (Element* list) {
     if (list == NULL) {
         return 0 ; 
@@ -183,188 +185,12 @@ int lenght_list (Element* list) {
     }
 }
 
-/////////////////////////////// ETAPE 2 : creation Queue ///////////////////////////////
-/* this part is the creation of a Queue containing all the node for the tree */
-
-// Create an empty Queue // 
-Queue* create_Queue () {
-    Queue* q = (Queue*)malloc(sizeof(Queue)) ; 
-    q->nletter = NULL ; 
-    q->next = NULL ; 
-
-    return q; 
-}
-
-// Say if the Queue is empty // 
-int is_empty_Q(Queue* q){
-  if (q->next == NULL && q->nletter == NULL){
-    return 1;                                                               // 1 = is empty
-  }
-  else {
-      return 0;                                                             // 0 = is not empty 
-  }
-}
-
-// il faudra faire une fonction pour remplir Q de tous les El et free les El après // 
-Queue* fill_Queue_list (Element* list) {
-    if (list == NULL) {
-        return NULL; 
-    }
-    else {
-        Queue* q = create_Queue () ;
-        
-        while (list != NULL) {
-        pushQ (&q, list); 
-        list =list->next ;
-        printf ("q = %c", q->nletter->data->letter) ;
-        }
-        return q ;
-    }
-}
-
-// Function that see what is in the Queue // 
-void peek (Queue* q) {
-    if (is_empty_Q(q) == 1) {
-        printf ("NULL \n");
-    }
-    else {
-        printf ("%c ", q->nletter->data->letter) ;
-        peek (q->next);
-    }
-}
-
-
-// Add an Element at the end of q // 
-void pushQ (Queue** q, Element* el) {
-    if (el != NULL) {
-        if (is_empty_Q (*q) == 1) {
-            Node* tree= create_node_el (el);
-            (*q)->nletter = tree;
-        }
-        else { 
-            Queue* temp = (*q) ->next;
-            while (temp ->next != NULL) {                                   // put temp = node at the end
-                temp = temp->next;
-            }
-            Node* tree = create_node_el(el);                                // add el at the end of the queue
-            Queue* new_q = create_Queue () ; 
-            new_q->nletter = tree ; 
-            temp -> next = new_q ; 
-        }
-    }
-}
-
-// A retirer //
-void free_Queue (Queue* q) {
-    if (q != NULL) {
-        free_Queue (q -> next) ;
-        printf ("'%c' ", q ->nletter->data->letter); 
-// Retirer free_letter dans le futur
-        free (q->nletter) ;                                             // Free the node
-        free(q);                                                        // Free the Queue
-    }
-}
-
-// Pop the 1st Node of the Queue // 
-void popQ_N (Queue** q){
-    if(is_empty_Q(*q) == 1 ){
-        printf ("NULL") ;
-     }
-     else{
-        Queue* temp = (*q);
-        (*q) = (*q)->next;
-
-/* can be removed */ 
-        printf("Pop = %c", temp->nletter->data->letter) ;                   // We display the letter that we pop -> the first Node
-        free (temp->nletter) ;                                              // We free the Node affiliate with the Queue
-        free(temp);                                                         // We free the Queue  
-    }
-}
-
-
-/*
-//Initialisation de la file- utile
-File* creer_File(){
-    File* f = malloc(sizeof(File));
-    f->premier = NULL;
-    return f;
-}
-
-//Est vide- utile
-int est_Vide(File* f){
-  if (f->premier == NULL)
-    return 1;// on a rien dans la file
-  else
-    return 0; // on a quelquechose dans la file
-}
-
-
-Maillon* retirer(File** f){
-  if ((*f)->premier == NULL){
-    return creationCellule('+'); //permettra de désigner la fin de liste
-  }
-  else{
-    Maillon *temp = (*f)->premier;
-    free((*f)->premier);
-    (*f)->premier = temp->suivant;    
-    return temp;
-  }  
-}
-
-//Affiche File - utile
-void afficher_File(File* f){ 
-  Maillon* temp = retirer(&f);
-  while (est_Vide(f) == 0){ 
-    printf("%c - %d",temp->info, temp->occ);
-    temp = retirer(&f); //rappel de la fonction retirer()pour changer d'item de ma liste
-  }
-}
-*/
-
 /////////////////////////////// ETAPE 2 : creation arbre ///////////////////////////////
 /* this part is the creation of the Huffman tree */ 
 
-// create a Node from an El //
-Node* create_node_el (Element* el) {
-    if (el == NULL ) {
-        return NULL; 
-    }
-    Node* new_node = (Node*) malloc (sizeof(Node)) ;
-    new_node ->data = el->El_letter;
-    new_node ->left = NULL ;
-    new_node ->right = NULL ; 
 
-    return new_node; 
-}
 
-/* create a Node from a value */ 
-Node* create_node_val(int val) {
-    Node* new_node = (Node*)malloc (sizeof (Node)) ;
-    new_node ->occ = val ; 
-    new_node ->left = NULL ;
-    new_node ->right = NULL ; 
 
-    return new_node ; 
-}
-
-/* free all the tree */ 
-void freeTree (Node* node)
-{
-    if (node != NULL) {
-        freeTree(node->left);  
-        freeTree(node->right);
-        free(node);
-    }
-}
-
-/* display the letter and the number of occ of each node in a tree in a pre-order*/ 
-void display_tree(Node* tree) {
-    if (tree != NULL) {
-        printf ("letter : %c      Occ = %d \n", tree ->data->letter, tree ->occ ) ;
-        display_tree (tree ->left) ; 
-        display_tree (tree->right) ; 
-    }
-}
 
 /* Create the node 2 by 2 and sum them to create a 3 node with jsut an occ */
 /* Idée 1 : un tree à partir d'une liste d'Element then sup the list itself, l'idée c'est d'utiliser un stack de 2 elements à chaque fois */  
@@ -386,27 +212,6 @@ Node* create_tree_huffman (Element **list) {
     // attention besoin de free() les elements utilisés pour faire la node. 
 }
 */
-
-/* Function that create the 3rt Node (head node) frome 2 Nodes */ 
-// toujours : el1 < el2 //
-Node* create_3rdNode (Element* el1, Element* el2) {
-    if (el1 == NULL || el2 == NULL) {
-        return NULL ;
-    }
-    Node* new_n1 = create_node_el (el1) ; 
-    Node* new_n2 = create_node_el (el2) ; 
-
-    Node* head_node = (Node*)malloc(sizeof(Node)) ;
-    head_node ->data = NULL; 
-    head_node ->occ = new_n1 ->occ + new_n2 ->occ ;
-    head_node ->left = new_n1  ;
-    head_node ->right = new_n2 ; 
-
-    return head_node ;
-}
-
-
-
 
 /*Somme des occurences de chaque caractère permettant de créer les Nodes ensuite*/
 /*
