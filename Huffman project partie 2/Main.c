@@ -13,11 +13,9 @@ int main () {
     sorted_list (&(list)) ; 
     display_list (list) ; 
 
-    printf ("\n-----------------Free list and letter-----------------\n");
-    free_list_2 (&list);   
+    printf ("\n-----------------Free list and Node----------------\n");
+    free_list (list);   
     
-    printf  ("\n") ; 
-    display_list (list) ; 
     
     return 0; 
 }
