@@ -1,5 +1,11 @@
 # Huffman_Project
-PRENEZ LE TEMPS DE LIRE - UPDATES POUR LA PARTIE 2
+
+
+PRENEZ LE TEMPS DE LIRE
+
+- Partie 1 et 2 merged
+
+- UPDATES POUR LA PARTIE 2
 
 Je poste les Updates ici maintenant : 
 
@@ -35,7 +41,5 @@ La Node fait office de lettre. Ce qui veut dire que nous avons dans Node la lett
         char letter ; 
         int occ ; 
     }
-
-Ps : j'en ai marre 
 
 */
