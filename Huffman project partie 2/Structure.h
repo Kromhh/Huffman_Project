@@ -30,14 +30,11 @@ Element* occ_text () ;
 void free_list (Element* list); 
 int posMaximum(Element *L);  
 void sorted_list (Element** list)  ;
-
-/* Pas changer */ 
-
-
 int lenght_list (Element* list) ;
 
-/* Pas changer */
-Node* SommListe(Element* L) ; // à tester 
+///////////////////////////////////////////////// Creation Huffman tree 
+Node* create_huffmanTree (Element **list) ; // a tester
+Node* Thrid_Node (Node* l1, Node* l2) ;     // à tester 
 
 
 #endif

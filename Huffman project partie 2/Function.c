@@ -33,11 +33,12 @@ void freeTree (Node* node)
     if (node != NULL) {
         freeTree(node->left);  
         freeTree(node->right);
+        printf("%c ", node ->letter) ; 
         free(node);
     }
 }
 
-/////////////////////////////// ETAPE 2 : create the list of letter ///////////////////////////////
+/////////////////////////////// ETAPE 2 : create the list of Node(which is the letter) ///////////////////////////////
 
 // Creation of an Element by a Node //
 
@@ -188,58 +189,47 @@ int lenght_list (Element* list) {
 /////////////////////////////// ETAPE 2 : creation arbre ///////////////////////////////
 /* this part is the creation of the Huffman tree */ 
 
-
-
-
-
-/* Create the node 2 by 2 and sum them to create a 3 node with jsut an occ */
-/* Idée 1 : un tree à partir d'une liste d'Element then sup the list itself, l'idée c'est d'utiliser un stack de 2 elements à chaque fois */  
-
-/*
-Node* create_tree_huffman (Element **list) {
-    if ((*list) == NULL) {
+// Creation of the tree from a sorted list of node, return the last Node = Huffman tree// 
+Node* create_huffmanTree (Element **list) {
+    if ((*list) == NULL) {                              
         printf ("Your list is empty \n") ; 
         return NULL ; 
     }
-    else
-    {
-        if ((*list)->next != NULL) {
-            Element* temp = (*list)->next ;
-            Element* save = temp ; 
-            Node* new_node = 1; // attention pas fini 
+    else {
+        Element* temp ;                                         // Var that take list -> next 
+
+        while ((*list)->next != NULL) {
+            temp = (*list)->next ;
+            Node* new_node = Thrid_Node ((*list) ->El_letter, temp-> El_letter) ; 
+            (*list) ->El_letter = new_node ; 
+            (*list) -> next = temp ->next ; 
+            free (temp) ;                                       // free the Element but not the Node 
+            sorted_list (list) ; 
+            display_list((*list));                              // Just to be beautiful 
         }
+
+        Node* save = (*list) ->El_letter ;                      // to save the node in the Element 
+        free (*list) ;                                          // free the last Element 
+        return save ;                                           // return the Node in the last Element 
     }
-    // attention besoin de free() les elements utilisés pour faire la node. 
 }
-*/
 
-/*Somme des occurences de chaque caractère permettant de créer les Nodes ensuite*/
-/*
-Node* SommListe(Element* L){
-  Element* temp, *p;
-  Node* Node;
-  int somme = 0;
-    
-  if(L != NULL){                                                                //tant qu'on est pas en fin de liste
-    temp = L;
-    p = temp->next;
+/* Somme des occurences de chaque Node permettant de créer une troisième Node qu'on renvoie */
+Node* Thrid_Node (Node* l1, Node* l2){                          // l2 >= l1 because right biger, left lower  
+    if(l1 == NULL || l2 == NULL || l1->occ > l2->occ) {
+        printf("Error in the given node \n") ; 
+        return NULL; 
+    }
+    else {
+        Node* thrid_n = (Node*)malloc(sizeof(Node)) ;
+        thrid_n ->letter = '0' ;                                // So we can see what is the thrid node and what is not // we can sup after 
+        thrid_n ->occ = l1->occ + l2->occ ; 
+        thrid_n ->left = l1 ; 
+        thrid_n ->right = l2 ; 
 
-    while (temp != NULL){
-      somme = somme + (temp->occ);
-      printf("Somme_de_2_Elements = %d\n", somme);                              //test pour savoir si la somme a bien été faite sur 2 Elements
-      Node = create_node_val(somme);  
-      printf("ok.\n");                                                          //test verif
-      temp->occ = p->occ;                                                       //avancement dans la liste               
-      temp = temp->next; 
-    } 
-    printf("ok1.\n");                                                           //test verif
-  }
-  printf("ok2.\n");                                                             //test verif
-  return Node;
+        return thrid_n ; 
+    }
 }
-*/
-
-// Ecrire les fonctions pour les arbres // 
 
 /////////////////////////////// ETAPE 3 ///////////////////////////////
 // Ecrire une fonction qui affiche la list de lettre dans un fichier, Un dictionnaire //

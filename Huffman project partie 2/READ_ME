@@ -2,7 +2,23 @@ PRENEZ LE TEMPS DE LIRE
 
 Je poste les Updates ici maintenant : 
 
-29 / 11 / 2020  /*
+03 / 12 / 2020 
+/* 
+L'abre de Huffman a été crée, à cette effet deux fonctions on était ajouté : 
+    - create_HuffmanTree 
+    - Thrid_Node 
+    (Elles sont dans la partie "Create HUffman tree" )
+
+le main a été changé pour permettre la création du "tree", et on n'oublie pas de free les nodes encore une fois. 
+
+Toutes les étapes sont affichées dans le terminal, mais on peut bien évidemment les sup pour faire plus propre. 
+
+Mis sur Github 
+*/
+
+
+29 / 11 / 2020  
+/*
 
 Encore une fois je change tout  :
     - Plus de strcuture Letter 
