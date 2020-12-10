@@ -5,11 +5,16 @@
 
 int main () {
 	char text[10000];
-    char *binary;
+    char *binary;                   // for the Binary of all the letter
     FILE *fp1 = NULL;
     FILE *fp2 = NULL;
 	int textLength, binaryLength;
+    char New_binary [100] ;         // For the new binary of the letter
 
+////////////////////////////////////////////////////////////// 
+/*To refrech dictionnary in case we have something in it or create it*/
+    fp1 = fopen ("dictionnary.txt", "w") ; 
+    fclose (fp1) ; 
 ////////////////////////////////////////////////////////////// part 1 creation of the binary 
 
     fp1 = fopen("Texte.txt", "r");
@@ -56,16 +61,30 @@ int main () {
 
     sorted_list (&(list)) ; 
     printf ("\n---------------------- list sorted ----------------------\n");
-    display_list (list) ; 
+    display_list (list) ;
 
+    Element* clist = (Element*)malloc(sizeof(Element));
+    clist = copylist(list, clist);
+    printf ("\n---------------------- copy list ----------------------\n");
+    display_list(clist);
 
-    Htree = create_huffmanTree (&(list)) ;
+    Htree = create_huffmanTree (&(list));
     printf ("\n-------------------------------- Huffman Tree --------------------------------\n");
-    display_tree (Htree); 
+    display_HufTree (Htree) ; 
+
+    create_dico (Htree, New_binary, binaryLength = 0,clist ) ;
+    printf ("\nDictionnary created \n") ;
+
+    printf ("\n---------------------- list bin ----------------------\n");
+    display_bin (clist);
+
+    Encodage (clist);
+
+    //Decodage (clist);
 
     printf ("\n-----------------Free HuffmanTree ----------------\n");
     freeTree (Htree) ; 
-    free(binary); //Free the memory
-
+    free(binary);                   //Free the memory
+    free_list(clist);
     return 0; 
 }

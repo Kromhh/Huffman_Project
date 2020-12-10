@@ -11,7 +11,8 @@ void Length2files(int binaryLength, int textLength);
 typedef struct Node
 {
     char letter ;
-    int occ ; 
+    int occ ;
+    char bin[100]; 
     struct Node* left ;
     struct Node* right;
 }Node;
@@ -37,9 +38,15 @@ int posMaximum(Element *L);
 void sorted_list (Element** list)  ;
 int lenght_list (Element* list) ;
 
-///////////////////////////////////////////////// Creation Huffman tree 
-Node* create_huffmanTree (Element **list) ; // a tester
-Node* Thrid_Node (Node* l1, Node* l2) ;     // à tester 
+///////////////////////////////////////////////// Creation Huffman tree and dico 
+Node* create_huffmanTree (Element **list) ;
+Node* Thrid_Node (Node* l1, Node* l2) ;      
+void display_HufTree (Node* tree) ;
+void create_dico ( Node* tree, char* Binary, int cpt,Element* list) ; 
 
-
+//////////////////////////////////////////////// Encodage&decodage 
+Element* copylist(Element* list, Element* clist);
+void display_bin (Element* list);
+void Encodage (Element* list);
+//void Decodage (Element* list);
 #endif
