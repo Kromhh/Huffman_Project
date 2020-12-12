@@ -1,15 +1,23 @@
 # Huffman_Project
 
+-- Friday 11th December -------------------------------------------------------------
+
+Part 1 and 2 have been merged with the part 3
+
+What was added :
+- The dictionary
+- The encoding function
+- The .txt files dictionnary.txt (dictionary) and output.txt (encoded text)
+
+
+-- Thursday 3rd December ----------------------------------------------------------------
 
 PRENEZ LE TEMPS DE LIRE
 
-- Partie 1 et 2 merged
+- Part 1 and 2 merged
 
 - UPDATES POUR LA PARTIE 2
 
-Je poste les Updates ici maintenant : 
-
-03 / 12 / 2020 
 /* 
 L'abre de Huffman a été crée, à cette effet deux fonctions on était ajouté : 
     - create_HuffmanTree 
@@ -24,7 +32,8 @@ Mis sur Github
 */
 
 
-29 / 11 / 2020  
+-- Sunday 29th November -------------------------------------------------------------------------------------
+ 
 /*
 
 Encore une fois je change tout  :
